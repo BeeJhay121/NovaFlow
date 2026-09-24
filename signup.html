@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account | NovaFlow</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Inter, Arial, sans-serif;
+            background: #070b14;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1100px;
+            min-height: 650px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: #0d1320;
+            border: 1px solid #202a3b;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.45);
+        }
+
+        /* LEFT SIDE */
+
+        .visual-side {
+            position: relative;
+            padding: 55px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background:
+                radial-gradient(circle at 20% 20%, rgba(92, 96, 255, 0.25), transparent 35%),
+                radial-gradient(circle at 85% 75%, rgba(0, 210, 255, 0.12), transparent 30%),
+                #0a1020;
+            border-right: 1px solid #202a3b;
+            overflow: hidden;
+        }
+
+        .visual-side::before {
+            content: "";
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            border: 1px solid rgba(112, 125, 255, 0.15);
+            border-radius: 50%;
+            top: 80px;
+            right: -100px;
+        }
+
+        .visual-side::after {
+            content: "";
+            position: absolute;
+            width: 420px;
+            height: 420px;
+            border: 1px solid rgba(112, 125, 255, 0.08);
+            border-radius: 50%;
+            bottom: -250px;
+            left: -150px;
+        }
+
+        .brand {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            box-shadow: 0 10px 30px rgba(79, 70, 229, 0.35);
+        }
+
+        .brand-icon span {
+            font-size: 18px;
+            font-weight: 900;
+        }
+
+        .visual-content {
+            position: relative;
+            z-index: 2;
+            max-width: 430px;
+        }
+
+        .visual-content h1 {
+            font-size: 48px;
+            line-height: 1.08;
+            letter-spacing: -2px;
+            margin-bottom: 22px;
+        }
+
+        .visual-content h1 span {
+            color: #818cf8;
+        }
+
+        .visual-content p {
+            color: #9ba7bb;
+            line-height: 1.7;
+            font-size: 16px;
+        }
+
+        .benefits {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            gap: 16px;
+            margin-top: 35px;
+        }
+
+        .benefit {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            color: #cbd5e1;
+            font-size: 14px;
+        }
+
+        .check {
+            width: 27px;
+            height: 27px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(99, 102, 241, 0.15);
+            color: #8b8ff8;
+            font-size: 14px;
+        }
+
+        .visual-footer {
+            position: relative;
+            z-index: 2;
+            color: #657188;
+            font-size: 12px;
+        }
+
+        /* RIGHT SIDE */
+
+        .form-side {
+            padding: 55px 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #0d1320;
+        }
+
+        .form-container {
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .form-header {
+            margin-bottom: 30px;
+        }
+
+        .form-header h2 {
+            font-size: 31px;
+            letter-spacing: -1px;
+            margin-bottom: 9px;
+        }
+
+        .form-header p {
+            color: #8490a5;
+            font-size: 14px;
+        }
+
+        .message {
+            display: none;
+            padding: 12px 14px;
+            border-radius: 9px;
+            margin-bottom: 18px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .message.error {
+            display: block;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.25);
+            color: #fca5a5;
+        }
+
+        .message.success {
+            display: block;
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.25);
+            color: #86efac;
+        }
+
+        .form-group {
+            margin-bottom: 17px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #cbd5e1;
+            margin-bottom: 8px;
+        }
+
+        .input-wrap {
+            position: relative;
+        }
+
+        .input-wrap input {
+            width: 100%;
+            height: 48px;
+            padding: 0 15px;
+            background: #090f1b;
+            border: 1px solid #273247;
+            border-radius: 9px;
+            color: #ffffff;
+            outline: none;
+            font-size: 14px;
+            transition: 0.2s ease;
+        }
+
+        .input-wrap input:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .input-wrap input::placeholder {
+            color: #566176;
+        }
+
+        .password-input {
+            padding-right: 52px !important;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 48px;
+            width: 48px;
+            border: none;
+            background: transparent;
+            color: #738097;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .toggle-password:hover {
+            color: #a5b4fc;
+        }
+
+        .terms {
+            display: flex;
+            align-items: flex-start;
+            gap: 9px;
+            margin: 20px 0;
+            color: #7e8ba0;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .terms input {
+            margin-top: 2px;
+            accent-color: #6366f1;
+            cursor: pointer;
+        }
+
+        .terms a {
+            color: #8b8ff8;
+            text-decoration: none;
+        }
+
+        .terms a:hover {
+            text-decoration: underline;
+        }
+
+        .primary-btn {
+            width: 100%;
+            height: 49px;
+            border: none;
+            border-radius: 9px;
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 12px 28px rgba(79, 70, 229, 0.25);
+        }
+
+        .primary-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 23px 0;
+            color: #586478;
+            font-size: 12px;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #202a3b;
+        }
+
+        .google-btn {
+            width: 100%;
+            height: 49px;
+            border-radius: 9px;
+            border: 1px solid #2b374b;
+            background: #111827;
+            color: #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 11px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .google-btn:hover {
+            background: #172033;
+            border-color: #3a465b;
+        }
+
+        .google-icon {
+            width: 19px;
+            height: 19px;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 25px;
+            color: #778398;
+            font-size: 13px;
+        }
+
+        .login-link a {
+            color: #8b8ff8;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 850px) {
+            .page {
+                grid-template-columns: 1fr;
+                max-width: 520px;
+            }
+
+            .visual-side {
+                display: none;
+            }
+
+            .form-side {
+                padding: 45px 30px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+
+            .page {
+                border-radius: 18px;
+            }
+
+            .form-side {
+                padding: 35px 22px;
+            }
+
+            .form-header h2 {
+                font-size: 27px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="page">
+
+        <!-- LEFT SIDE -->
+        <section class="visual-side">
+
+            <div class="brand">
+                <div class="brand-icon">
+                    <span>N</span>
+                </div>
+                NovaFlow
+            </div>
+
+            <div class="visual-content">
+
+                <h1>
+                    Build better.<br>
+                    Work <span>smarter.</span>
+                </h1>
+
+                <p>
+                    Create your NovaFlow account and bring your projects,
+                    tasks and team into one simple workspace.
+                </p>
+
+                <div class="benefits">
+
+                    <div class="benefit">
+                        <div class="check">✓</div>
+                        Manage projects in one place
+                    </div>
+
+                    <div class="benefit">
+                        <div class="check">✓</div>
+                        Track tasks and team progress
+                    </div>
+
+                    <div class="benefit">
+                        <div class="check">✓</div>
+                        Get useful workspace insights
+                    </div>
+
+                    <div class="benefit">
+                        <div class="check">✓</div>
+                        Start with a free account
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="visual-footer">
+                © 2026 NovaFlow. All rights reserved.
+            </div>
+
+        </section>
+
+
+        <!-- RIGHT SIDE -->
+        <section class="form-side">
+
+            <div class="form-container">
+
+                <div class="form-header">
+                    <h2>Create your account</h2>
+                    <p>Get started with NovaFlow today.</p>
+                </div>
+
+                <div id="message" class="message"></div>
+
+                <form id="signupForm">
+
+                    <div class="form-group">
+                        <label for="fullName">Full name</label>
+
+                        <div class="input-wrap">
+                            <input
+                                type="text"
+                                id="fullName"
+                                placeholder="Enter your full name"
+                                autocomplete="name"
+                                required
+                            >
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="email">Email address</label>
+
+                        <div class="input-wrap">
+                            <input
+                                type="email"
+                                id="email"
+                                placeholder="you@example.com"
+                                autocomplete="email"
+                                required
+                            >
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+
+                        <div class="input-wrap">
+
+                            <input
+                                type="password"
+                                id="password"
+                                class="password-input"
+                                placeholder="Create a password"
+                                autocomplete="new-password"
+                                minlength="6"
+                                required
+                            >
+
+                            <button
+                                type="button"
+                                class="toggle-password"
+                                id="togglePassword"
+                                aria-label="Show password"
+                            >
+                                👁
+                            </button>
+
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm password</label>
+
+                        <div class="input-wrap">
+
+                            <input
+                                type="password"
+                                id="confirmPassword"
+                                class="password-input"
+                                placeholder="Confirm your password"
+                                autocomplete="new-password"
+                                minlength="6"
+                                required
+                            >
+
+                            <button
+                                type="button"
+                                class="toggle-password"
+                                id="toggleConfirmPassword"
+                                aria-label="Show password"
+                            >
+                                👁
+                            </button>
+
+                        </div>
+                    </div>
+
+
+                    <label class="terms">
+
+                        <input
+                            type="checkbox"
+                            id="terms"
+                            required
+                        >
+
+                        <span>
+                            I agree to NovaFlow's
+                            <a href="#" onclick="return false;">Terms of Service</a>
+                            and
+                            <a href="#" onclick="return false;">Privacy Policy</a>.
+                        </span>
+
+                    </label>
+
+
+                    <button
+                        type="submit"
+                        class="primary-btn"
+                        id="signupBtn"
+                    >
+                        Create free account
+                    </button>
+
+                </form>
+
+
+                <div class="divider">
+                    OR
+                </div>
+
+
+                <!-- GOOGLE SIGNUP -->
+                <button
+                    type="button"
+                    class="google-btn"
+                    id="googleSignup"
+                >
+
+                    <svg
+                        class="google-icon"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path
+                            fill="#4285F4"
+                            d="M21.35 12.23c0-.79-.07-1.55-.23-2.27H12v4.3h5.22a4.46 4.46 0 0 1-1.94 2.93v2.44h3.14c1.84-1.69 2.93-4.18 2.93-7.4z"
+                        />
+
+                        <path
+                            fill="#34A853"
+                            d="M12 21.5c2.63 0 4.84-.87 6.45-2.35l-3.14-2.44c-.87.58-1.98.93-3.31.93-2.55 0-4.71-1.72-5.49-4.03H3.27v2.52A9.74 9.74 0 0 0 12 21.5z"
+                        />
+
+                        <path
+                            fill="#FBBC05"
+                            d="M6.51 13.61A5.86 5.86 0 0 1 6.2 12c0-.56.1-1.1.31-1.61V7.87H3.27A9.76 9.76 0 0 0 2.25 12c0 1.57.38 3.05 1.02 4.13l3.24-2.52z"
+                        />
+
+                        <path
+                            fill="#EA4335"
+                            d="M12 6.36c1.43 0 2.71.49 3.72 1.45l2.79-2.79C16.84 3.49 14.63 2.5 12 2.5a9.74 9.74 0 0 0-8.73 5.37l3.24 2.52C7.29 8.08 9.45 6.36 12 6.36z"
+                        />
+                    </svg>
+
+                    Continue with Google
+
+                </button>
+
+
+                <div class="login-link">
+                    Already have an account?
+                    <a href="login.html">Log in</a>
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+    <!-- FIREBASE -->
+    <script type="module">
+
+        import {
+            initializeApp
+        } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+
+        import {
+            getAuth,
+            createUserWithEmailAndPassword,
+            updateProfile,
+            GoogleAuthProvider,
+            signInWithPopup
+        } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAsWjzaVWeYUtXATnftoKzqg6S6AWs1wKY",
+            authDomain: "novaflow-beejhay.firebaseapp.com",
+            projectId: "novaflow-beejhay",
+            storageBucket: "novaflow-beejhay.firebasestorage.app",
+            messagingSenderId: "244628081829",
+            appId: "1:244628081829:web:8df65584cfc2fde39f114c",
+            measurementId: "G-THK6BR4GF9"
+        };
+
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+
+        // Elements
+        const signupForm = document.getElementById("signupForm");
+        const fullName = document.getElementById("fullName");
+        const email = document.getElementById("email");
+        const password = document.getElementById("password");
+        const confirmPassword = document.getElementById("confirmPassword");
+        const terms = document.getElementById("terms");
+
+        const signupBtn = document.getElementById("signupBtn");
+        const googleSignup = document.getElementById("googleSignup");
+
+        const message = document.getElementById("message");
+
+        const togglePassword = document.getElementById("togglePassword");
+        const toggleConfirmPassword =
+            document.getElementById("toggleConfirmPassword");
+
+
+        // Show message
+        function showMessage(text, type) {
+
+            message.textContent = text;
+
+            message.className = "message " + type;
+
+        }
+
+
+        // Clear message
+        function clearMessage() {
+
+            message.textContent = "";
+            message.className = "message";
+
+        }
+
+
+        // Password visibility
+        togglePassword.addEventListener("click", () => {
+
+            if (password.type === "password") {
+
+                password.type = "text";
+                togglePassword.textContent = "🙈";
+                togglePassword.setAttribute(
+                    "aria-label",
+                    "Hide password"
+                );
+
+            } else {
+
+                password.type = "password";
+                togglePassword.textContent = "👁";
+                togglePassword.setAttribute(
+                    "aria-label",
+                    "Show password"
+                );
+
+            }
+
+        });
+
+
+        // Confirm password visibility
+        toggleConfirmPassword.addEventListener("click", () => {
+
+            if (confirmPassword.type === "password") {
+
+                confirmPassword.type = "text";
+                toggleConfirmPassword.textContent = "🙈";
+                toggleConfirmPassword.setAttribute(
+                    "aria-label",
+                    "Hide password"
+                );
+
+            } else {
+
+                confirmPassword.type = "password";
+                toggleConfirmPassword.textContent = "👁";
+                toggleConfirmPassword.setAttribute(
+                    "aria-label",
+                    "Show password"
+                );
+
+            }
+
+        });
+
+
+        // Firebase error messages
+        function getFirebaseError(error) {
+
+            switch (error.code) {
+
+                case "auth/email-already-in-use":
+                    return "An account with this email already exists.";
+
+                case "auth/invalid-email":
+                    return "Please enter a valid email address.";
+
+                case "auth/weak-password":
+                    return "Password is too weak. Use at least 6 characters.";
+
+                case "auth/network-request-failed":
+                    return "Network error. Please check your internet connection.";
+
+                case "auth/popup-closed-by-user":
+                    return "Google sign-up was cancelled.";
+
+                case "auth/popup-blocked":
+                    return "Your browser blocked the Google sign-up window.";
+
+                case "auth/cancelled-popup-request":
+                    return "The Google sign-up request was cancelled.";
+
+                case "auth/operation-not-allowed":
+                    return "This sign-up method is currently disabled in Firebase.";
+
+                case "auth/too-many-requests":
+                    return "Too many attempts. Please try again later.";
+
+                default:
+                    return error.message || "Something went wrong. Please try again.";
+
+            }
+
+        }
+
+
+        // Email/password signup
+        signupForm.addEventListener("submit", async (event) => {
+
+            event.preventDefault();
+
+            clearMessage();
+
+
+            const nameValue = fullName.value.trim();
+            const emailValue = email.value.trim();
+            const passwordValue = password.value;
+            const confirmValue = confirmPassword.value;
+
+
+            if (nameValue.length < 2) {
+
+                showMessage(
+                    "Please enter your full name.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            if (passwordValue.length < 6) {
+
+                showMessage(
+                    "Password must contain at least 6 characters.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            if (passwordValue !== confirmValue) {
+
+                showMessage(
+                    "Passwords do not match.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            if (!terms.checked) {
+
+                showMessage(
+                    "Please agree to the Terms of Service and Privacy Policy.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            signupBtn.disabled = true;
+            signupBtn.textContent = "Creating account...";
+
+
+            try {
+
+                const userCredential =
+                    await createUserWithEmailAndPassword(
+                        auth,
+                        emailValue,
+                        passwordValue
+                    );
+
+
+                // Save user's name to Firebase profile
+                await updateProfile(
+                    userCredential.user,
+                    {
+                        displayName: nameValue
+                    }
+                );
+
+
+                showMessage(
+                    "Account created successfully. Redirecting...",
+                    "success"
+                );
+
+
+                // Go to dashboard
+                setTimeout(() => {
+
+                    window.location.href = "dashboard.html";
+
+                }, 700);
+
+
+            } catch (error) {
+
+                console.error("Signup error:", error);
+
+                showMessage(
+                    getFirebaseError(error),
+                    "error"
+                );
+
+                signupBtn.disabled = false;
+                signupBtn.textContent = "Create free account";
+
+            }
+
+        });
+
+
+        // Google signup
+        googleSignup.addEventListener("click", async () => {
+
+            clearMessage();
+
+            googleSignup.disabled = true;
+            googleSignup.textContent = "Connecting to Google...";
+
+
+            try {
+
+                const provider = new GoogleAuthProvider();
+
+                provider.setCustomParameters({
+                    prompt: "select_account"
+                });
+
+
+                await signInWithPopup(
+                    auth,
+                    provider
+                );
+
+
+                showMessage(
+                    "Google account connected successfully. Redirecting...",
+                    "success"
+                );
+
+
+                // Go to dashboard
+                setTimeout(() => {
+
+                    window.location.href = "dashboard.html";
+
+                }, 700);
+
+
+            } catch (error) {
+
+                console.error("Google signup error:", error);
+
+                showMessage(
+                    getFirebaseError(error),
+                    "error"
+                );
+
+                googleSignup.disabled = false;
+
+                googleSignup.innerHTML = `
+                    <svg
+                        class="google-icon"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path
+                            fill="#4285F4"
+                            d="M21.35 12.23c0-.79-.07-1.55-.23-2.27H12v4.3h5.22a4.46 4.46 0 0 1-1.94 2.93v2.44h3.14c1.84-1.69 2.93-4.18 2.93-7.4z"
+                        />
+
+                        <path
+                            fill="#34A853"
+                            d="M12 21.5c2.63 0 4.84-.87 6.45-2.35l-3.14-2.44c-.87.58-1.98.93-3.31.93-2.55 0-4.71-1.72-5.49-4.03H3.27v2.52A9.74 9.74 0 0 0 12 21.5z"
+                        />
+
+                        <path
+                            fill="#FBBC05"
+                            d="M6.51 13.61A5.86 5.86 0 0 1 6.2 12c0-.56.1-1.1.31-1.61V7.87H3.27A9.76 9.76 0 0 0 2.25 12c0 1.57.38 3.05 1.02 4.13l3.24-2.52z"
+                        />
+
+                        <path
+                            fill="#EA4335"
+                            d="M12 6.36c1.43 0 2.71.49 3.72 1.45l2.79-2.79C16.84 3.49 14.63 2.5 12 2.5a9.74 9.74 0 0 0-8.73 5.37l3.24 2.52C7.29 8.08 9.45 6.36 12 6.36z"
+                        />
+                    </svg>
+
+                    Continue with Google
+                `;
+
+            }
+
+        });
+
+    </script>
+
+</body>
+</html>

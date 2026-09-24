@@ -1,0 +1,3341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | NovaFlow</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #070b14;
+            --sidebar: #0a101b;
+            --card: #0d1421;
+            --card-2: #111a2a;
+            --border: #202b3d;
+            --text: #f8fafc;
+            --muted: #8290a7;
+            --accent: #6366f1;
+            --accent-light: #818cf8;
+            --green: #22c55e;
+            --yellow: #f59e0b;
+            --red: #ef4444;
+            --blue: #38bdf8;
+        }
+
+        body {
+            font-family: Inter, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* =========================
+           LAYOUT
+        ========================= */
+
+        .app {
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 245px;
+            background: var(--sidebar);
+            border-right: 1px solid var(--border);
+            padding: 24px 16px;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .main {
+            margin-left: 245px;
+            min-height: 100vh;
+            padding: 28px 32px 50px;
+        }
+
+        /* =========================
+           BRAND
+        ========================= */
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 21px;
+            font-weight: 800;
+            margin: 0 10px 38px;
+        }
+
+        .brand-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            box-shadow: 0 10px 25px rgba(79, 70, 229, .25);
+        }
+
+        /* =========================
+           NAVIGATION
+        ========================= */
+
+        .nav-title {
+            color: #4e5b70;
+            text-transform: uppercase;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 1.2px;
+            margin: 0 12px 10px;
+        }
+
+        .nav {
+            display: grid;
+            gap: 5px;
+        }
+
+        .nav-btn {
+            width: 100%;
+            border: none;
+            background: transparent;
+            color: #78869d;
+            padding: 11px 12px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-align: left;
+            font-size: 13px;
+            transition: .2s ease;
+        }
+
+        .nav-btn:hover {
+            background: #101827;
+            color: #dbe3ef;
+        }
+
+        .nav-btn.active {
+            background: rgba(99, 102, 241, .13);
+            color: #a5b4fc;
+        }
+
+        .nav-icon {
+            width: 19px;
+            text-align: center;
+            font-size: 15px;
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+        }
+
+        .profile {
+            padding: 13px;
+            border: 1px solid var(--border);
+            background: #0d1522;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        .profile-info {
+            min-width: 0;
+        }
+
+        .profile-name {
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .profile-email {
+            color: #68758b;
+            font-size: 10px;
+            margin-top: 3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .logout-btn {
+            margin-top: 9px;
+            width: 100%;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: #8290a7;
+            padding: 9px;
+            border-radius: 8px;
+            font-size: 12px;
+        }
+
+        .logout-btn:hover {
+            color: #fca5a5;
+            border-color: rgba(239, 68, 68, .3);
+        }
+
+        /* =========================
+           MOBILE HEADER
+        ========================= */
+
+        .mobile-header {
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 22px;
+        }
+
+        .mobile-menu {
+            width: 42px;
+            height: 42px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            background: var(--card);
+            color: white;
+        }
+
+        /* =========================
+           TOPBAR
+        ========================= */
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .page-title h1 {
+            font-size: 27px;
+            letter-spacing: -.8px;
+        }
+
+        .page-title p {
+            color: var(--muted);
+            font-size: 13px;
+            margin-top: 6px;
+        }
+
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .search {
+            width: 230px;
+            height: 40px;
+            border: 1px solid var(--border);
+            background: var(--card);
+            color: white;
+            border-radius: 9px;
+            padding: 0 13px;
+            outline: none;
+            font-size: 12px;
+        }
+
+        .search:focus {
+            border-color: var(--accent);
+        }
+
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--border);
+            background: var(--card);
+            color: #8d99ad;
+            border-radius: 9px;
+        }
+
+        .icon-btn:hover {
+            color: white;
+            border-color: #354158;
+        }
+
+        .primary-btn {
+            height: 40px;
+            padding: 0 15px;
+            border: none;
+            border-radius: 8px;
+            background: var(--accent);
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .primary-btn:hover {
+            background: #5558e9;
+        }
+
+        /* =========================
+           SECTIONS
+        ========================= */
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        /* =========================
+           STAT CARDS
+        ========================= */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            padding: 19px;
+        }
+
+        .stat-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 17px;
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .stat-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(99, 102, 241, .12);
+            color: #9da3ff;
+        }
+
+        .stat-value {
+            font-size: 27px;
+            font-weight: 800;
+        }
+
+        .stat-note {
+            color: #647187;
+            font-size: 10px;
+            margin-top: 5px;
+        }
+
+        /* =========================
+           GRID
+        ========================= */
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1.4fr .9fr;
+            gap: 18px;
+            margin-bottom: 18px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 18px 19px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .card-header h3 {
+            font-size: 14px;
+        }
+
+        .card-header span {
+            color: #68758b;
+            font-size: 11px;
+        }
+
+        .card-body {
+            padding: 18px;
+        }
+
+        /* =========================
+           TASKS
+        ========================= */
+
+        .task-list {
+            display: grid;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            padding: 13px 18px;
+            border-bottom: 1px solid rgba(32, 43, 61, .65);
+        }
+
+        .task-item:last-child {
+            border-bottom: none;
+        }
+
+        .task-check {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .task-info {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .task-name {
+            font-size: 12px;
+            color: #dbe3ef;
+        }
+
+        .task-name.completed {
+            color: #5e6a7e;
+            text-decoration: line-through;
+        }
+
+        .task-meta {
+            color: #647187;
+            font-size: 10px;
+            margin-top: 4px;
+        }
+
+        .task-delete {
+            background: transparent;
+            border: none;
+            color: #4e5a6d;
+            font-size: 14px;
+        }
+
+        .task-delete:hover {
+            color: #f87171;
+        }
+
+        /* =========================
+           PROJECTS
+        ========================= */
+
+        .project-list {
+            display: grid;
+            gap: 14px;
+        }
+
+        .project {
+            padding: 14px;
+            background: #0a101b;
+            border: 1px solid #1b2637;
+            border-radius: 10px;
+        }
+
+        .project-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 11px;
+        }
+
+        .project-name {
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .project-percent {
+            color: #8b96a9;
+            font-size: 11px;
+        }
+
+        .progress {
+            height: 6px;
+            background: #1a2434;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #6366f1, #818cf8);
+            border-radius: inherit;
+        }
+
+        .project-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 9px;
+            color: #5e6a7e;
+            font-size: 10px;
+        }
+
+        .project-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .small-btn {
+            border: 1px solid var(--border);
+            background: transparent;
+            color: #8290a7;
+            border-radius: 6px;
+            padding: 5px 8px;
+            font-size: 10px;
+        }
+
+        .small-btn:hover {
+            color: white;
+        }
+
+        .delete-btn:hover {
+            color: #f87171;
+            border-color: rgba(239, 68, 68, .3);
+        }
+
+        /* =========================
+           ACTIVITY
+        ========================= */
+
+        .activity-list {
+            display: grid;
+        }
+
+        .activity {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 0;
+            border-bottom: 1px solid #182334;
+        }
+
+        .activity:last-child {
+            border-bottom: none;
+        }
+
+        .activity-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: var(--accent);
+            flex-shrink: 0;
+        }
+
+        .activity-text {
+            flex: 1;
+            color: #aab5c7;
+            font-size: 11px;
+        }
+
+        .activity-time {
+            color: #586579;
+            font-size: 9px;
+        }
+
+        /* =========================
+           ANALYTICS
+        ========================= */
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .chart {
+            height: 250px;
+            padding: 20px;
+            display: flex;
+            align-items: end;
+            gap: 12px;
+        }
+
+        .bar-wrap {
+            flex: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: end;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .bar {
+            width: 100%;
+            max-width: 34px;
+            background: linear-gradient(to top, #4f46e5, #818cf8);
+            border-radius: 6px 6px 2px 2px;
+            min-height: 4px;
+        }
+
+        .bar-label {
+            color: #647187;
+            font-size: 9px;
+        }
+
+        .analytics-numbers {
+            display: grid;
+            gap: 12px;
+        }
+
+        .analytics-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px;
+            background: #0a101b;
+            border: 1px solid #1b2637;
+            border-radius: 9px;
+        }
+
+        .analytics-row span {
+            color: #7d899e;
+            font-size: 11px;
+        }
+
+        .analytics-row strong {
+            font-size: 15px;
+        }
+
+        /* =========================
+           TEAM
+        ========================= */
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .team-card {
+            padding: 18px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+        }
+
+        .team-member {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .member-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #1e293b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #a5b4fc;
+            font-weight: 800;
+            font-size: 12px;
+        }
+
+        .member-name {
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .member-role {
+            color: #68758b;
+            font-size: 10px;
+            margin-top: 3px;
+        }
+
+        .member-status {
+            color: #4ade80;
+            font-size: 10px;
+        }
+
+        /* =========================
+           CALENDAR
+        ========================= */
+
+        .calendar-list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .calendar-event {
+            display: flex;
+            gap: 13px;
+            padding: 14px;
+            background: #0a101b;
+            border: 1px solid #1b2637;
+            border-radius: 9px;
+        }
+
+        .event-time {
+            color: #8b8ff8;
+            font-size: 11px;
+            min-width: 65px;
+        }
+
+        .event-title {
+            font-size: 12px;
+        }
+
+        .event-date {
+            color: #647187;
+            font-size: 10px;
+            margin-top: 4px;
+        }
+
+        /* =========================
+           SETTINGS
+        ========================= */
+
+        .settings-card {
+            max-width: 700px;
+            padding: 22px;
+        }
+
+        .setting {
+            padding: 18px 0;
+            border-bottom: 1px solid #1b2637;
+        }
+
+        .setting:last-child {
+            border-bottom: none;
+        }
+
+        .setting h4 {
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .setting p {
+            color: #6d7a8f;
+            font-size: 11px;
+            margin-bottom: 12px;
+        }
+
+        .setting input,
+        .setting select {
+            width: 100%;
+            height: 42px;
+            background: #090f1b;
+            border: 1px solid #263249;
+            border-radius: 8px;
+            color: white;
+            padding: 0 12px;
+            outline: none;
+            font-size: 12px;
+        }
+
+        .setting input:focus,
+        .setting select:focus {
+            border-color: var(--accent);
+        }
+
+        .setting-actions {
+            margin-top: 16px;
+            display: flex;
+            gap: 8px;
+        }
+
+        /* =========================
+           MODAL
+        ========================= */
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 500;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-box {
+            width: 100%;
+            max-width: 450px;
+            background: #0d1421;
+            border: 1px solid #29354a;
+            border-radius: 14px;
+            padding: 22px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, .5);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            font-size: 16px;
+        }
+
+        .close-modal {
+            width: 30px;
+            height: 30px;
+            border: none;
+            background: transparent;
+            color: #718096;
+            font-size: 20px;
+        }
+
+        .modal-form {
+            display: grid;
+            gap: 14px;
+        }
+
+        .field label {
+            display: block;
+            color: #aab5c7;
+            font-size: 11px;
+            margin-bottom: 7px;
+        }
+
+        .field input,
+        .field select {
+            width: 100%;
+            height: 43px;
+            background: #090f1b;
+            border: 1px solid #263249;
+            border-radius: 8px;
+            color: white;
+            padding: 0 11px;
+            outline: none;
+            font-size: 12px;
+        }
+
+        .field input:focus,
+        .field select:focus {
+            border-color: var(--accent);
+        }
+
+        .modal-submit {
+            margin-top: 5px;
+            width: 100%;
+            height: 43px;
+            border: none;
+            border-radius: 8px;
+            background: var(--accent);
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        /* =========================
+           EMPTY STATE
+        ========================= */
+
+        .empty {
+            padding: 35px 15px;
+            text-align: center;
+            color: #59667b;
+            font-size: 12px;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 1100px) {
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .analytics-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+        @media (max-width: 800px) {
+
+            .sidebar {
+                transform: translateX(-100%);
+                transition: .25s ease;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .mobile-header {
+                display: flex;
+            }
+
+            .topbar {
+                align-items: flex-start;
+            }
+
+            .search {
+                width: 170px;
+            }
+
+            .team-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+        }
+
+        @media (max-width: 560px) {
+
+            .stats {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            .stat-card {
+                padding: 14px;
+            }
+
+            .topbar {
+                flex-direction: column;
+            }
+
+            .top-actions {
+                width: 100%;
+            }
+
+            .search {
+                flex: 1;
+                width: auto;
+            }
+
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .main {
+                padding: 16px;
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+
+        <div class="brand">
+            <div class="brand-icon">N</div>
+            NovaFlow
+        </div>
+
+        <div class="nav-title">Workspace</div>
+
+        <nav class="nav">
+
+            <button class="nav-btn active" data-section="overview">
+                <span class="nav-icon">⌂</span>
+                Overview
+            </button>
+
+            <button class="nav-btn" data-section="projects">
+                <span class="nav-icon">▣</span>
+                Projects
+            </button>
+
+            <button class="nav-btn" data-section="tasks">
+                <span class="nav-icon">✓</span>
+                Tasks
+            </button>
+
+            <button class="nav-btn" data-section="analytics">
+                <span class="nav-icon">◒</span>
+                Analytics
+            </button>
+
+            <button class="nav-btn" data-section="team">
+                <span class="nav-icon">♙</span>
+                Team
+            </button>
+
+            <button class="nav-btn" data-section="calendar">
+                <span class="nav-icon">□</span>
+                Calendar
+            </button>
+
+            <button class="nav-btn" data-section="settings">
+                <span class="nav-icon">⚙</span>
+                Settings
+            </button>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <div class="profile">
+
+                <div class="avatar" id="userAvatar">U</div>
+
+                <div class="profile-info">
+
+                    <div class="profile-name" id="userName">
+                        Loading...
+                    </div>
+
+                    <div class="profile-email" id="userEmail">
+                        Loading...
+                    </div>
+
+                </div>
+
+            </div>
+
+            <button class="logout-btn" id="logoutBtn">
+                Log out
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+    <main class="main">
+
+        <div class="mobile-header">
+
+            <div class="brand">
+                <div class="brand-icon">N</div>
+                NovaFlow
+            </div>
+
+            <button class="mobile-menu" id="mobileMenu">
+                ☰
+            </button>
+
+        </div>
+
+
+        <!-- TOPBAR -->
+        <div class="topbar">
+
+            <div class="page-title">
+
+                <h1 id="pageHeading">
+                    Dashboard
+                </h1>
+
+                <p id="pageSubtitle">
+                    Here's what's happening in your workspace.
+                </p>
+
+            </div>
+
+            <div class="top-actions">
+
+                <input
+                    type="search"
+                    class="search"
+                    id="searchInput"
+                    placeholder="Search..."
+                >
+
+                <button class="icon-btn" title="Notifications">
+                    ♢
+                </button>
+
+                <button
+                    class="primary-btn"
+                    id="quickAddBtn"
+                >
+                    + Add
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             OVERVIEW
+        ========================= -->
+
+        <section
+            class="section active"
+            id="overview"
+        >
+
+            <div class="stats">
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+                        <span class="stat-label">Total Tasks</span>
+                        <span class="stat-icon">✓</span>
+                    </div>
+
+                    <div class="stat-value" id="totalTasks">
+                        0
+                    </div>
+
+                    <div class="stat-note">
+                        All workspace tasks
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+                        <span class="stat-label">In Progress</span>
+                        <span class="stat-icon">◔</span>
+                    </div>
+
+                    <div class="stat-value" id="inProgress">
+                        0
+                    </div>
+
+                    <div class="stat-note">
+                        Active tasks
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+                        <span class="stat-label">Completed</span>
+                        <span class="stat-icon">✓</span>
+                    </div>
+
+                    <div class="stat-value" id="completedTasks">
+                        0
+                    </div>
+
+                    <div class="stat-note">
+                        Finished tasks
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+                        <span class="stat-label">Projects</span>
+                        <span class="stat-icon">▣</span>
+                    </div>
+
+                    <div class="stat-value" id="totalProjects">
+                        0
+                    </div>
+
+                    <div class="stat-note">
+                        Active projects
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-grid">
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <h3>Today's Tasks</h3>
+
+                        <button
+                            class="small-btn"
+                            onclick="openTaskModal()"
+                        >
+                            + Add task
+                        </button>
+
+                    </div>
+
+                    <div
+                        class="task-list"
+                        id="overviewTasks"
+                    ></div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <h3>Projects</h3>
+
+                        <button
+                            class="small-btn"
+                            onclick="openProjectModal()"
+                        >
+                            + New
+                        </button>
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div
+                            class="project-list"
+                            id="overviewProjects"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-header">
+                    <h3>Recent Activity</h3>
+                    <span>Live workspace activity</span>
+                </div>
+
+                <div class="card-body">
+
+                    <div
+                        class="activity-list"
+                        id="activityList"
+                    ></div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             PROJECTS
+        ========================= -->
+
+        <section
+            class="section"
+            id="projects"
+        >
+
+            <div class="card">
+
+                <div class="card-header">
+
+                    <h3>Projects</h3>
+
+                    <button
+                        class="primary-btn"
+                        onclick="openProjectModal()"
+                    >
+                        + New project
+                    </button>
+
+                </div>
+
+                <div class="card-body">
+
+                    <div
+                        class="project-list"
+                        id="projectsList"
+                    ></div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             TASKS
+        ========================= -->
+
+        <section
+            class="section"
+            id="tasks"
+        >
+
+            <div class="card">
+
+                <div class="card-header">
+
+                    <h3>All Tasks</h3>
+
+                    <button
+                        class="primary-btn"
+                        onclick="openTaskModal()"
+                    >
+                        + New task
+                    </button>
+
+                </div>
+
+                <div
+                    class="task-list"
+                    id="allTasks"
+                ></div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             ANALYTICS
+        ========================= -->
+
+        <section
+            class="section"
+            id="analytics"
+        >
+
+            <div class="analytics-grid">
+
+                <div class="card">
+
+                    <div class="card-header">
+                        <h3>Task Activity</h3>
+                        <span>Current workspace</span>
+                    </div>
+
+                    <div
+                        class="chart"
+                        id="activityChart"
+                    ></div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-header">
+                        <h3>Workspace Analytics</h3>
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="analytics-numbers">
+
+                            <div class="analytics-row">
+                                <span>Total tasks</span>
+                                <strong id="analyticsTotal">0</strong>
+                            </div>
+
+                            <div class="analytics-row">
+                                <span>Completed</span>
+                                <strong id="analyticsCompleted">0</strong>
+                            </div>
+
+                            <div class="analytics-row">
+                                <span>Completion rate</span>
+                                <strong id="completionRate">0%</strong>
+                            </div>
+
+                            <div class="analytics-row">
+                                <span>Projects</span>
+                                <strong id="analyticsProjects">0</strong>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             TEAM
+        ========================= -->
+
+        <section
+            class="section"
+            id="team"
+        >
+
+            <div class="card">
+
+                <div class="card-header">
+
+                    <h3>Team</h3>
+
+                    <span>Workspace members</span>
+
+                </div>
+
+                <div class="card-body">
+
+                    <div
+                        class="team-grid"
+                        id="teamGrid"
+                    ></div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             CALENDAR
+        ========================= -->
+
+        <section
+            class="section"
+            id="calendar"
+        >
+
+            <div class="card">
+
+                <div class="card-header">
+
+                    <h3>Calendar</h3>
+
+                    <button
+                        class="primary-btn"
+                        onclick="openEventModal()"
+                    >
+                        + Add event
+                    </button>
+
+                </div>
+
+                <div class="card-body">
+
+                    <div
+                        class="calendar-list"
+                        id="calendarList"
+                    ></div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             SETTINGS
+        ========================= -->
+
+        <section
+            class="section"
+            id="settings"
+        >
+
+            <div class="card settings-card">
+
+                <div class="card-header">
+                    <h3>Settings</h3>
+                </div>
+
+                <div class="card-body">
+
+                    <div class="setting">
+
+                        <h4>Display name</h4>
+
+                        <p>
+                            This name will be displayed around your workspace.
+                        </p>
+
+                        <input
+                            type="text"
+                            id="displayNameInput"
+                            placeholder="Your name"
+                        >
+
+                    </div>
+
+
+                    <div class="setting">
+
+                        <h4>Default section</h4>
+
+                        <p>
+                            Choose which section opens when you enter the dashboard.
+                        </p>
+
+                        <select id="defaultSection">
+
+                            <option value="overview">
+                                Overview
+                            </option>
+
+                            <option value="projects">
+                                Projects
+                            </option>
+
+                            <option value="tasks">
+                                Tasks
+                            </option>
+
+                            <option value="analytics">
+                                Analytics
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="setting-actions">
+
+                        <button
+                            class="primary-btn"
+                            id="saveSettings"
+                        >
+                            Save settings
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- =========================
+     PROJECT MODAL
+========================= -->
+
+<div
+    class="modal"
+    id="projectModal"
+>
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h3>Create project</h3>
+
+            <button
+                class="close-modal"
+                onclick="closeModal('projectModal')"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <form
+            class="modal-form"
+            id="projectForm"
+        >
+
+            <div class="field">
+
+                <label>Project name</label>
+
+                <input
+                    type="text"
+                    id="projectName"
+                    placeholder="e.g. Website Redesign"
+                    required
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label>Progress</label>
+
+                <input
+                    type="number"
+                    id="projectProgress"
+                    min="0"
+                    max="100"
+                    value="0"
+                    required
+                >
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="modal-submit"
+            >
+                Create project
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     TASK MODAL
+========================= -->
+
+<div
+    class="modal"
+    id="taskModal"
+>
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h3>Create task</h3>
+
+            <button
+                class="close-modal"
+                onclick="closeModal('taskModal')"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <form
+            class="modal-form"
+            id="taskForm"
+        >
+
+            <div class="field">
+
+                <label>Task name</label>
+
+                <input
+                    type="text"
+                    id="taskName"
+                    placeholder="e.g. Finish homepage design"
+                    required
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label>Time</label>
+
+                <input
+                    type="time"
+                    id="taskTime"
+                    required
+                >
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="modal-submit"
+            >
+                Create task
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     EVENT MODAL
+========================= -->
+
+<div
+    class="modal"
+    id="eventModal"
+>
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h3>Add calendar event</h3>
+
+            <button
+                class="close-modal"
+                onclick="closeModal('eventModal')"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <form
+            class="modal-form"
+            id="eventForm"
+        >
+
+            <div class="field">
+
+                <label>Event title</label>
+
+                <input
+                    type="text"
+                    id="eventTitle"
+                    placeholder="e.g. Client meeting"
+                    required
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label>Date</label>
+
+                <input
+                    type="date"
+                    id="eventDate"
+                    required
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label>Time</label>
+
+                <input
+                    type="time"
+                    id="eventTime"
+                    required
+                >
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="modal-submit"
+            >
+                Add event
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- FIREBASE -->
+<script type="module">
+
+    import {
+        initializeApp
+    } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+
+    import {
+        getAuth,
+        onAuthStateChanged,
+        signOut
+    } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyAsWjzaVWeYUtXATnftoKzqg6S6AWs1wKY",
+        authDomain: "novaflow-beejhay.firebaseapp.com",
+        projectId: "novaflow-beejhay",
+        storageBucket: "novaflow-beejhay.firebasestorage.app",
+        messagingSenderId: "244628081829",
+        appId: "1:244628081829:web:8df65584cfc2fde39f114c",
+        measurementId: "G-THK6BR4GF9"
+    };
+
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+
+    /* =========================
+       DATA
+    ========================= */
+
+    const defaultData = {
+        projects: [
+            {
+                id: crypto.randomUUID(),
+                name: "Website Redesign",
+                progress: 75
+            },
+            {
+                id: crypto.randomUUID(),
+                name: "Content Creation",
+                progress: 50
+            },
+            {
+                id: crypto.randomUUID(),
+                name: "Client Outreach",
+                progress: 30
+            }
+        ],
+
+        tasks: [
+            {
+                id: crypto.randomUUID(),
+                name: "Finish website redesign",
+                time: "09:00",
+                completed: false
+            },
+            {
+                id: crypto.randomUUID(),
+                name: "Review client feedback",
+                time: "11:00",
+                completed: true
+            },
+            {
+                id: crypto.randomUUID(),
+                name: "Prepare project proposal",
+                time: "14:00",
+                completed: false
+            },
+            {
+                id: crypto.randomUUID(),
+                name: "Team meeting",
+                time: "16:00",
+                completed: false
+            }
+        ],
+
+        events: [
+            {
+                id: crypto.randomUUID(),
+                title: "Client call",
+                date: "",
+                time: "10:00"
+            },
+            {
+                id: crypto.randomUUID(),
+                title: "Project review",
+                date: "",
+                time: "13:00"
+            }
+        ],
+
+        activities: [],
+
+        settings: {
+            displayName: "",
+            defaultSection: "overview"
+        }
+    };
+
+
+    let data = null;
+
+
+    /* =========================
+       STORAGE
+    ========================= */
+
+    function getStorageKey(user) {
+
+        return "novaflow_dashboard_" + user.uid;
+
+    }
+
+
+    function loadData(user) {
+
+        const key = getStorageKey(user);
+
+        const saved = localStorage.getItem(key);
+
+        if (saved) {
+
+            try {
+
+                data = JSON.parse(saved);
+
+            } catch {
+
+                data = structuredClone(defaultData);
+
+            }
+
+        } else {
+
+            data = structuredClone(defaultData);
+
+            saveData(user);
+
+        }
+
+    }
+
+
+    function saveData(user = auth.currentUser) {
+
+        if (!user || !data) return;
+
+        localStorage.setItem(
+            getStorageKey(user),
+            JSON.stringify(data)
+        );
+
+    }
+
+
+    /* =========================
+       ACTIVITY
+    ========================= */
+
+    function addActivity(text) {
+
+        data.activities.unshift({
+            id: crypto.randomUUID(),
+            text,
+            time: new Date().toLocaleTimeString([], {
+                hour: "numeric",
+                minute: "2-digit"
+            })
+        });
+
+        data.activities =
+            data.activities.slice(0, 10);
+
+        saveData();
+
+    }
+
+
+    /* =========================
+       AUTH
+    ========================= */
+
+    onAuthStateChanged(auth, (user) => {
+
+        if (!user) {
+
+            window.location.href = "login.html";
+            return;
+
+        }
+
+        loadData(user);
+
+        setupUser(user);
+        renderEverything();
+
+        const defaultSection =
+            data.settings.defaultSection || "overview";
+
+        switchSection(defaultSection);
+
+    });
+
+
+    function setupUser(user) {
+
+        const name =
+            data.settings.displayName ||
+            user.displayName ||
+            user.email?.split("@")[0] ||
+            "User";
+
+        document.getElementById("userName").textContent = name;
+
+        document.getElementById("userEmail").textContent =
+            user.email || "";
+
+        document.getElementById("userAvatar").textContent =
+            getInitials(name);
+
+        document.getElementById("displayNameInput").value =
+            data.settings.displayName ||
+            user.displayName ||
+            "";
+
+        document.getElementById("defaultSection").value =
+            data.settings.defaultSection ||
+            "overview";
+
+    }
+
+
+    function getInitials(name) {
+
+        return name
+            .split(" ")
+            .slice(0, 2)
+            .map(word => word.charAt(0))
+            .join("")
+            .toUpperCase();
+
+    }
+
+
+    /* =========================
+       NAVIGATION
+    ========================= */
+
+    document.querySelectorAll(".nav-btn")
+        .forEach(button => {
+
+            button.addEventListener("click", () => {
+
+                switchSection(
+                    button.dataset.section
+                );
+
+                document
+                    .getElementById("sidebar")
+                    .classList.remove("open");
+
+            });
+
+        });
+
+
+    function switchSection(sectionName) {
+
+        document
+            .querySelectorAll(".section")
+            .forEach(section => {
+
+                section.classList.remove("active");
+
+            });
+
+
+        document
+            .querySelectorAll(".nav-btn")
+            .forEach(button => {
+
+                button.classList.remove("active");
+
+            });
+
+
+        const section =
+            document.getElementById(sectionName);
+
+        const navButton =
+            document.querySelector(
+                `.nav-btn[data-section="${sectionName}"]`
+            );
+
+
+        if (section) {
+
+            section.classList.add("active");
+
+        }
+
+        if (navButton) {
+
+            navButton.classList.add("active");
+
+        }
+
+
+        const titles = {
+
+            overview: [
+                "Dashboard",
+                "Here's what's happening in your workspace."
+            ],
+
+            projects: [
+                "Projects",
+                "Manage your active projects."
+            ],
+
+            tasks: [
+                "Tasks",
+                "Create and manage your workspace tasks."
+            ],
+
+            analytics: [
+                "Analytics",
+                "Track your workspace activity."
+            ],
+
+            team: [
+                "Team",
+                "Manage your workspace members."
+            ],
+
+            calendar: [
+                "Calendar",
+                "Keep track of upcoming events."
+            ],
+
+            settings: [
+                "Settings",
+                "Customize your NovaFlow workspace."
+            ]
+
+        };
+
+
+        const title = titles[sectionName];
+
+        if (title) {
+
+            document.getElementById("pageHeading").textContent =
+                title[0];
+
+            document.getElementById("pageSubtitle").textContent =
+                title[1];
+
+        }
+
+    }
+
+
+    /* =========================
+       RENDER EVERYTHING
+    ========================= */
+
+    function renderEverything() {
+
+        renderStats();
+        renderTasks();
+        renderProjects();
+        renderActivities();
+        renderAnalytics();
+        renderCalendar();
+        renderTeam();
+
+    }
+
+
+    /* =========================
+       STATS
+    ========================= */
+
+    function renderStats() {
+
+        const total =
+            data.tasks.length;
+
+        const completed =
+            data.tasks.filter(
+                task => task.completed
+            ).length;
+
+        const progress =
+            total - completed;
+
+        document.getElementById("totalTasks").textContent =
+            total;
+
+        document.getElementById("inProgress").textContent =
+            progress;
+
+        document.getElementById("completedTasks").textContent =
+            completed;
+
+        document.getElementById("totalProjects").textContent =
+            data.projects.length;
+
+    }
+
+
+    /* =========================
+       TASKS
+    ========================= */
+
+    function renderTasks() {
+
+        const overview =
+            document.getElementById("overviewTasks");
+
+        const all =
+            document.getElementById("allTasks");
+
+
+        const html =
+            data.tasks.length
+                ? data.tasks.map(taskTemplate).join("")
+                : `<div class="empty">
+                    No tasks yet. Create your first task.
+                   </div>`;
+
+
+        overview.innerHTML =
+            html;
+
+        all.innerHTML =
+            html;
+
+
+        attachTaskEvents();
+
+    }
+
+
+    function taskTemplate(task) {
+
+        return `
+            <div class="task-item">
+
+                <input
+                    type="checkbox"
+                    class="task-check"
+                    data-task-id="${task.id}"
+                    ${task.completed ? "checked" : ""}
+                >
+
+                <div class="task-info">
+
+                    <div class="task-name ${task.completed ? "completed" : ""}">
+                        ${escapeHTML(task.name)}
+                    </div>
+
+                    <div class="task-meta">
+                        ${formatTime(task.time)}
+                    </div>
+
+                </div>
+
+                <button
+                    class="task-delete"
+                    data-delete-task="${task.id}"
+                    title="Delete task"
+                >
+                    ×
+                </button>
+
+            </div>
+        `;
+
+    }
+
+
+    function attachTaskEvents() {
+
+        document
+            .querySelectorAll(".task-check")
+            .forEach(check => {
+
+                check.addEventListener("change", () => {
+
+                    const task =
+                        data.tasks.find(
+                            item =>
+                                item.id === check.dataset.taskId
+                        );
+
+                    if (!task) return;
+
+                    task.completed =
+                        check.checked;
+
+                    addActivity(
+                        task.completed
+                            ? `Completed task "${task.name}"`
+                            : `Reopened task "${task.name}"`
+                    );
+
+                    saveData();
+
+                    renderEverything();
+
+                });
+
+            });
+
+
+        document
+            .querySelectorAll("[data-delete-task]")
+            .forEach(button => {
+
+                button.addEventListener("click", () => {
+
+                    const id =
+                        button.dataset.deleteTask;
+
+                    const task =
+                        data.tasks.find(
+                            item => item.id === id
+                        );
+
+                    data.tasks =
+                        data.tasks.filter(
+                            item => item.id !== id
+                        );
+
+                    if (task) {
+
+                        addActivity(
+                            `Deleted task "${task.name}"`
+                        );
+
+                    }
+
+                    saveData();
+
+                    renderEverything();
+
+                });
+
+            });
+
+    }
+
+
+    /* =========================
+       PROJECTS
+    ========================= */
+
+    function renderProjects() {
+
+        const overview =
+            document.getElementById("overviewProjects");
+
+        const list =
+            document.getElementById("projectsList");
+
+
+        if (!data.projects.length) {
+
+            const empty = `
+                <div class="empty">
+                    No projects yet. Create your first project.
+                </div>
+            `;
+
+            overview.innerHTML = empty;
+            list.innerHTML = empty;
+
+            return;
+
+        }
+
+
+        const html =
+            data.projects
+                .map(projectTemplate)
+                .join("");
+
+
+        overview.innerHTML =
+            html;
+
+        list.innerHTML =
+            html;
+
+
+        attachProjectEvents();
+
+    }
+
+
+    function projectTemplate(project) {
+
+        return `
+            <div class="project">
+
+                <div class="project-top">
+
+                    <div class="project-name">
+                        ${escapeHTML(project.name)}
+                    </div>
+
+                    <div class="project-percent">
+                        ${project.progress}%
+                    </div>
+
+                </div>
+
+                <div class="progress">
+
+                    <div
+                        class="progress-bar"
+                        style="width:${project.progress}%"
+                    ></div>
+
+                </div>
+
+                <div class="project-footer">
+
+                    <span>
+                        ${project.progress === 100
+                            ? "Completed"
+                            : "In progress"}
+                    </span>
+
+                    <div class="project-actions">
+
+                        <button
+                            class="small-btn"
+                            data-edit-project="${project.id}"
+                        >
+                            Edit
+                        </button>
+
+                        <button
+                            class="small-btn delete-btn"
+                            data-delete-project="${project.id}"
+                        >
+                            Delete
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+        `;
+
+    }
+
+
+    function attachProjectEvents() {
+
+        document
+            .querySelectorAll("[data-delete-project]")
+            .forEach(button => {
+
+                button.addEventListener("click", () => {
+
+                    const id =
+                        button.dataset.deleteProject;
+
+                    const project =
+                        data.projects.find(
+                            item => item.id === id
+                        );
+
+                    data.projects =
+                        data.projects.filter(
+                            item => item.id !== id
+                        );
+
+                    if (project) {
+
+                        addActivity(
+                            `Deleted project "${project.name}"`
+                        );
+
+                    }
+
+                    saveData();
+
+                    renderEverything();
+
+                });
+
+            });
+
+
+        document
+            .querySelectorAll("[data-edit-project]")
+            .forEach(button => {
+
+                button.addEventListener("click", () => {
+
+                    const id =
+                        button.dataset.editProject;
+
+                    const project =
+                        data.projects.find(
+                            item => item.id === id
+                        );
+
+                    if (!project) return;
+
+                    const newProgress =
+                        prompt(
+                            `Update progress for "${project.name}" (0-100):`,
+                            project.progress
+                        );
+
+
+                    if (newProgress === null) return;
+
+                    const value =
+                        Number(newProgress);
+
+
+                    if (
+                        Number.isNaN(value) ||
+                        value < 0 ||
+                        value > 100
+                    ) {
+
+                        alert(
+                            "Please enter a number between 0 and 100."
+                        );
+
+                        return;
+
+                    }
+
+
+                    project.progress =
+                        Math.round(value);
+
+                    addActivity(
+                        `Updated "${project.name}" to ${project.progress}%`
+                    );
+
+                    saveData();
+
+                    renderEverything();
+
+                });
+
+            });
+
+    }
+
+
+    /* =========================
+       PROJECT MODAL
+    ========================= */
+
+    window.openProjectModal = function () {
+
+        document
+            .getElementById("projectModal")
+            .classList.add("show");
+
+        document
+            .getElementById("projectName")
+            .focus();
+
+    };
+
+
+    document
+        .getElementById("projectForm")
+        .addEventListener("submit", event => {
+
+            event.preventDefault();
+
+            const name =
+                document
+                    .getElementById("projectName")
+                    .value
+                    .trim();
+
+            const progress =
+                Number(
+                    document
+                        .getElementById("projectProgress")
+                        .value
+                );
+
+
+            if (!name) return;
+
+
+            data.projects.push({
+
+                id: crypto.randomUUID(),
+
+                name,
+
+                progress: Math.max(
+                    0,
+                    Math.min(100, progress)
+                )
+
+            });
+
+
+            addActivity(
+                `Created project "${name}"`
+            );
+
+
+            saveData();
+
+            renderEverything();
+
+            event.target.reset();
+
+            closeModal("projectModal");
+
+        });
+
+
+    /* =========================
+       TASK MODAL
+    ========================= */
+
+    window.openTaskModal = function () {
+
+        document
+            .getElementById("taskModal")
+            .classList.add("show");
+
+        document
+            .getElementById("taskName")
+            .focus();
+
+    };
+
+
+    document
+        .getElementById("taskForm")
+        .addEventListener("submit", event => {
+
+            event.preventDefault();
+
+
+            const name =
+                document
+                    .getElementById("taskName")
+                    .value
+                    .trim();
+
+            const time =
+                document
+                    .getElementById("taskTime")
+                    .value;
+
+
+            if (!name || !time) return;
+
+
+            data.tasks.push({
+
+                id: crypto.randomUUID(),
+
+                name,
+
+                time,
+
+                completed: false
+
+            });
+
+
+            addActivity(
+                `Created task "${name}"`
+            );
+
+
+            saveData();
+
+            renderEverything();
+
+            event.target.reset();
+
+            closeModal("taskModal");
+
+        });
+
+
+    /* =========================
+       CALENDAR
+    ========================= */
+
+    function renderCalendar() {
+
+        const container =
+            document.getElementById("calendarList");
+
+
+        if (!data.events.length) {
+
+            container.innerHTML =
+                `<div class="empty">
+                    No upcoming events.
+                 </div>`;
+
+            return;
+
+        }
+
+
+        const sorted =
+            [...data.events]
+                .sort((a, b) =>
+                    (a.date + a.time)
+                        .localeCompare(b.date + b.time)
+                );
+
+
+        container.innerHTML =
+            sorted.map(event => `
+
+                <div class="calendar-event">
+
+                    <div class="event-time">
+                        ${formatTime(event.time)}
+                    </div>
+
+                    <div style="flex:1">
+
+                        <div class="event-title">
+                            ${escapeHTML(event.title)}
+                        </div>
+
+                        <div class="event-date">
+                            ${event.date
+                                ? formatDate(event.date)
+                                : "Upcoming"}
+                        </div>
+
+                    </div>
+
+                    <button
+                        class="task-delete"
+                        data-delete-event="${event.id}"
+                    >
+                        ×
+                    </button>
+
+                </div>
+
+            `).join("");
+
+
+        document
+            .querySelectorAll("[data-delete-event]")
+            .forEach(button => {
+
+                button.addEventListener("click", () => {
+
+                    const id =
+                        button.dataset.deleteEvent;
+
+                    data.events =
+                        data.events.filter(
+                            event => event.id !== id
+                        );
+
+                    addActivity(
+                        "Removed a calendar event"
+                    );
+
+                    saveData();
+
+                    renderCalendar();
+
+                });
+
+            });
+
+    }
+
+
+    window.openEventModal = function () {
+
+        document
+            .getElementById("eventModal")
+            .classList.add("show");
+
+        document
+            .getElementById("eventTitle")
+            .focus();
+
+    };
+
+
+    document
+        .getElementById("eventForm")
+        .addEventListener("submit", event => {
+
+            event.preventDefault();
+
+
+            const title =
+                document
+                    .getElementById("eventTitle")
+                    .value
+                    .trim();
+
+            const date =
+                document
+                    .getElementById("eventDate")
+                    .value;
+
+            const time =
+                document
+                    .getElementById("eventTime")
+                    .value;
+
+
+            if (!title || !date || !time) return;
+
+
+            data.events.push({
+
+                id: crypto.randomUUID(),
+
+                title,
+
+                date,
+
+                time
+
+            });
+
+
+            addActivity(
+                `Added calendar event "${title}"`
+            );
+
+
+            saveData();
+
+            renderEverything();
+
+            event.target.reset();
+
+            closeModal("eventModal");
+
+        });
+
+
+    /* =========================
+       ANALYTICS
+    ========================= */
+
+    function renderAnalytics() {
+
+        const total =
+            data.tasks.length;
+
+        const completed =
+            data.tasks.filter(
+                task => task.completed
+            ).length;
+
+        const rate =
+            total
+                ? Math.round((completed / total) * 100)
+                : 0;
+
+
+        document.getElementById("analyticsTotal")
+            .textContent = total;
+
+        document.getElementById("analyticsCompleted")
+            .textContent = completed;
+
+        document.getElementById("completionRate")
+            .textContent = rate + "%";
+
+        document.getElementById("analyticsProjects")
+            .textContent = data.projects.length;
+
+
+        const chart =
+            document.getElementById("activityChart");
+
+
+        const days = [
+            "Mon",
+            "Tue",
+            "Wed",
+            "Thu",
+            "Fri",
+            "Sat",
+            "Sun"
+        ];
+
+
+        const values =
+            days.map((day, index) => {
+
+                const value =
+                    Math.max(
+                        2,
+                        (data.activities.length + index * 2) % 10
+                    );
+
+                return value;
+
+            });
+
+
+        const max =
+            Math.max(...values);
+
+
+        chart.innerHTML =
+            values.map((value, index) => `
+
+                <div class="bar-wrap">
+
+                    <div
+                        class="bar"
+                        style="height:${(value / max) * 80}%"
+                        title="${value} activities"
+                    ></div>
+
+                    <div class="bar-label">
+                        ${days[index]}
+                    </div>
+
+                </div>
+
+            `).join("");
+
+    }
+
+
+    /* =========================
+       ACTIVITY
+    ========================= */
+
+    function renderActivities() {
+
+        const container =
+            document.getElementById("activityList");
+
+
+        if (!data.activities.length) {
+
+            container.innerHTML =
+                `<div class="empty">
+                    Your workspace activity will appear here.
+                 </div>`;
+
+            return;
+
+        }
+
+
+        container.innerHTML =
+            data.activities
+                .slice(0, 8)
+                .map(activity => `
+
+                    <div class="activity">
+
+                        <div class="activity-dot"></div>
+
+                        <div class="activity-text">
+                            ${escapeHTML(activity.text)}
+                        </div>
+
+                        <div class="activity-time">
+                            ${escapeHTML(activity.time)}
+                        </div>
+
+                    </div>
+
+                `)
+                .join("");
+
+    }
+
+
+    /* =========================
+       TEAM
+    ========================= */
+
+    function renderTeam() {
+
+        const user =
+            auth.currentUser;
+
+
+        const name =
+            data.settings.displayName ||
+            user?.displayName ||
+            user?.email?.split("@")[0] ||
+            "You";
+
+
+        const initials =
+            getInitials(name);
+
+
+        document.getElementById("teamGrid").innerHTML = `
+
+            <div class="team-card">
+
+                <div class="team-member">
+
+                    <div class="member-avatar">
+                        ${escapeHTML(initials)}
+                    </div>
+
+                    <div>
+
+                        <div class="member-name">
+                            ${escapeHTML(name)}
+                        </div>
+
+                        <div class="member-role">
+                            Workspace Owner
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="member-status">
+                    ● Active
+                </div>
+
+            </div>
+
+            <div class="team-card">
+
+                <div class="team-member">
+
+                    <div class="member-avatar">
+                        NF
+                    </div>
+
+                    <div>
+
+                        <div class="member-name">
+                            NovaFlow
+                        </div>
+
+                        <div class="member-role">
+                            Workspace Assistant
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="member-status">
+                    ● Available
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+
+    /* =========================
+       SEARCH
+    ========================= */
+
+    document
+        .getElementById("searchInput")
+        .addEventListener("input", event => {
+
+            const query =
+                event.target.value
+                    .toLowerCase()
+                    .trim();
+
+
+            if (!query) {
+
+                renderTasks();
+                renderProjects();
+
+                return;
+
+            }
+
+
+            const filteredTasks =
+                data.tasks.filter(task =>
+                    task.name
+                        .toLowerCase()
+                        .includes(query)
+                );
+
+
+            const filteredProjects =
+                data.projects.filter(project =>
+                    project.name
+                        .toLowerCase()
+                        .includes(query)
+                );
+
+
+            document.getElementById("allTasks").innerHTML =
+                filteredTasks.length
+                    ? filteredTasks.map(taskTemplate).join("")
+                    : `<div class="empty">
+                        No matching tasks found.
+                       </div>`;
+
+
+            document.getElementById("projectsList").innerHTML =
+                filteredProjects.length
+                    ? filteredProjects.map(projectTemplate).join("")
+                    : `<div class="empty">
+                        No matching projects found.
+                       </div>`;
+
+
+            attachTaskEvents();
+            attachProjectEvents();
+
+        });
+
+
+    /* =========================
+       QUICK ADD
+    ========================= */
+
+    document
+        .getElementById("quickAddBtn")
+        .addEventListener("click", () => {
+
+            const active =
+                document.querySelector(".section.active");
+
+            if (!active) return;
+
+
+            if (active.id === "projects") {
+
+                openProjectModal();
+
+            } else if (active.id === "calendar") {
+
+                openEventModal();
+
+            } else {
+
+                openTaskModal();
+
+            }
+
+        });
+
+
+    /* =========================
+       SETTINGS
+    ========================= */
+
+    document
+        .getElementById("saveSettings")
+        .addEventListener("click", () => {
+
+            const name =
+                document
+                    .getElementById("displayNameInput")
+                    .value
+                    .trim();
+
+            const section =
+                document
+                    .getElementById("defaultSection")
+                    .value;
+
+
+            data.settings.displayName =
+                name;
+
+            data.settings.defaultSection =
+                section;
+
+
+            addActivity(
+                "Updated workspace settings"
+            );
+
+
+            saveData();
+
+            setupUser(auth.currentUser);
+
+            alert("Settings saved successfully.");
+
+        });
+
+
+    /* =========================
+       MOBILE MENU
+    ========================= */
+
+    document
+        .getElementById("mobileMenu")
+        .addEventListener("click", () => {
+
+            document
+                .getElementById("sidebar")
+                .classList.toggle("open");
+
+        });
+
+
+    /* =========================
+       MODAL HELPERS
+    ========================= */
+
+    window.closeModal = function(id) {
+
+        document
+            .getElementById(id)
+            .classList.remove("show");
+
+    };
+
+
+    document
+        .querySelectorAll(".modal")
+        .forEach(modal => {
+
+            modal.addEventListener("click", event => {
+
+                if (event.target === modal) {
+
+                    modal.classList.remove("show");
+
+                }
+
+            });
+
+        });
+
+
+    /* =========================
+       HELPERS
+    ========================= */
+
+    function formatTime(time) {
+
+        if (!time) return "";
+
+        const [hour, minute] =
+            time.split(":");
+
+        const date =
+            new Date();
+
+        date.setHours(
+            Number(hour),
+            Number(minute)
+        );
+
+        return date.toLocaleTimeString(
+            [],
+            {
+                hour: "numeric",
+                minute: "2-digit"
+            }
+        );
+
+    }
+
+
+    function formatDate(dateString) {
+
+        if (!dateString) return "";
+
+        const date =
+            new Date(dateString + "T00:00:00");
+
+        return date.toLocaleDateString(
+            [],
+            {
+                month: "short",
+                day: "numeric",
+                year: "numeric"
+            }
+        );
+
+    }
+
+
+    function escapeHTML(value) {
+
+        return String(value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+
+
+</script>
+
+</body>
+</html>
